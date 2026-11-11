@@ -2,6 +2,7 @@
 
 ![Projeto acadêmico](https://img.shields.io/badge/Projeto-Acad%C3%AAmico-2e7d32?style=for-the-badge)
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-DDL%20%2F%20DML-4479A1?style=for-the-badge)
 ![Tabelas](https://img.shields.io/badge/Tabelas-18-8d6e63?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)
@@ -45,6 +46,7 @@ A Madeira Verde não mantém estoque de produtos prontos: cada encomenda dispara
 | **Modelagem** | DBDesigner (DER e MER) |
 | **Banco de dados** | MariaDB (compatível com MySQL) |
 | **Scripts** | SQL — DDL e DML |
+| **Ambiente** | Docker Compose com MariaDB 11 e phpMyAdmin 5 |
 | **Documentação** | Markdown com diagramas Mermaid |
 
 ---
@@ -98,6 +100,7 @@ software-modeling/
 ├── report.md   # Relatório: convenção de nomes e decisões de modelagem
 ├── ddl.sql     # Criação do banco MadeiraVerde e das 18 tabelas
 ├── dml.sql     # Dados de exemplo para todas as tabelas
+├── docker-compose.yml  # MariaDB com os scripts + phpMyAdmin em localhost:8080
 ├── LICENSE
 └── README.md
 ```
@@ -106,20 +109,38 @@ software-modeling/
 
 ## ⚡ Como Executar
 
-Com um MariaDB (ou MySQL) local:
+### Com Docker (recomendado)
+
+```bash
+docker compose up
+```
+
+O Compose sobe o MariaDB, executa o `ddl.sql` e o `dml.sql` e, quando o banco está pronto, mostra no log:
+
+```text
+url-1  | Banco MadeiraVerde pronto. Cliente MariaDB em http://localhost:8080
+```
+
+Acesse **`http://localhost:8080`**: o **phpMyAdmin** abre já autenticado, com o banco `MadeiraVerde` disponível para navegar pelas tabelas e rodar consultas na aba **SQL**.
+
+Para encerrar, use `Ctrl+C`. Os scripts só rodam na criação do banco; para recriá-lo do zero após alterar algum deles:
+
+```bash
+docker compose down
+docker compose up
+```
+
+Também é possível usar o cliente de linha de comando do container:
+
+```bash
+docker compose exec db mariadb -uroot -proot MadeiraVerde
+```
+
+### Com um MariaDB local
 
 ```bash
 mariadb -u root -p < ddl.sql
 mariadb -u root -p < dml.sql
-```
-
-Ou em um container descartável:
-
-```bash
-docker run -d --name madeira-verde -e MARIADB_ROOT_PASSWORD=root mariadb:11
-docker exec -i madeira-verde mariadb -uroot -proot < ddl.sql
-docker exec -i madeira-verde mariadb -uroot -proot < dml.sql
-docker exec -it madeira-verde mariadb -uroot -proot MadeiraVerde
 ```
 
 O `ddl.sql` cria o banco `MadeiraVerde`; para rodá-lo de novo, remova o banco antes com `DROP DATABASE MadeiraVerde;`.
@@ -139,7 +160,8 @@ O `ddl.sql` cria o banco `MadeiraVerde`; para rodá-lo de novo, remova o banco a
 
 ## 📌 Escopo & Limitações
 
-- **Somente o banco de dados**: não há aplicação; o repositório contém o modelo e os scripts.
+- **Somente o banco de dados**: não há aplicação; o repositório contém o modelo, os scripts e o ambiente Docker para executá-los.
+- **Credenciais locais**: `root`/`root` e o phpMyAdmin com login automático servem apenas para uso local.
 - **Diagramas originais fora do repositório**: o DER e o MER foram feitos no DBDesigner; aqui o modelo é representado pelo diagrama Mermaid e pelos scripts.
 - **Dados fictícios**: o `dml.sql` usa dados inventados, com nomes de personalidades, apenas para exemplo.
 - **Requisitos parciais**: alguns pontos do edital, como as horas de mão de obra por produto e vários telefones por empresa, não foram modelados; a lista completa está no [relatório](report.md#diferenças-em-relação-ao-edital).

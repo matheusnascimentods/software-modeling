@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      # Executados em ordem alfabética na primeira subida do banco
+      - ./ddl.sql:/docker-entrypoint-initdb.d/1-ddl.sql:ro
+      - ./dml.sql:/docker-entrypoint-initdb.d/2-dml.sql:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 2s
+      retries: 30
+
+  client:
+    image: phpmyadmin:5
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8080:80"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  url:
+    image: busybox
+    command: echo "Banco MadeiraVerde pronto. Cliente MariaDB em http://localhost:8080"
+    depends_on:
+      - client

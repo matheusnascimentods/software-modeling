@@ -66,15 +66,17 @@ Como várias entidades têm endereço (empresas, clientes, funcionários e encom
 | Script | Conteúdo |
 | :--- | :--- |
 | [`ddl.sql`](ddl.sql) | Cria o banco `MadeiraVerde` e as 18 tabelas, na ordem das dependências entre chaves estrangeiras |
-| [`dml.sql`](dml.sql) | Insere dados fictícios em todas as tabelas: uma marcenaria, um fornecedor, um cliente, dois funcionários, dois produtos e uma encomenda com dois itens |
+| [`dml.sql`](dml.sql) | Insere dados fictícios em todas as tabelas: 10 empresas, 4 clientes, 3 fornecedores, 14 componentes, 5 funcionários, 6 produtos, 5 encomendas com 9 itens e 5 ordens de serviço |
 
 ### Ajustes em relação à entrega original
 
-Ao executar os scripts no MariaDB, que usa modo estrito por padrão, o DML original falhava. Para que ele rode do início ao fim:
+O DML original falhava no MariaDB, que usa modo estrito por padrão, e tinha poucos registros por tabela. Ele foi revisado para rodar do início ao fim e ter dados suficientes para consultas:
 
 - **Valores encurtados** para caber nos tamanhos das colunas: dois complementos de endereço, a razão social da marcenaria, o ramo de atividade do cliente e o nome da estante.
 - **Forma de pagamento**: `'Crypto'`, que não existe no `ENUM`, foi trocado por `'Pix'`.
-- **Comentário da ordem de serviço** corrigido: a máquina 1 é a CNC, não uma serra.
+- **Referências corrigidas**: a ferramenta, a máquina e o material apontavam para componentes errados (a serra circular era o puxador de cristal, e a CNC e a lixa eram o verniz). Cada um ganhou seu próprio componente. O cliente e a empresa de manutenção, que apontavam para a própria marcenaria, ganharam empresas próprias.
+- **Mais dados**: novos clientes varejistas, fornecedores, componentes, funcionários com hierarquia em dois níveis, produtos, encomendas e manutenções. Os valores totais das encomendas batem com a soma dos itens.
+- **Inserções agrupadas**: cada tabela usa um único `INSERT` com várias linhas, com comentários indicando o ID gerado.
 
 O DDL não mudou.
 

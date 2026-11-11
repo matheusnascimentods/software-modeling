@@ -101,6 +101,7 @@ software-modeling/
 ├── ddl.sql     # Criação do banco MadeiraVerde e das 18 tabelas
 ├── dml.sql     # Dados de exemplo para todas as tabelas
 ├── docker-compose.yml  # MariaDB com os scripts + phpMyAdmin em localhost:8080
+├── start.sh            # Sobe o ambiente e abre o phpMyAdmin no navegador
 ├── LICENSE
 └── README.md
 ```
@@ -112,22 +113,28 @@ software-modeling/
 ### Com Docker (recomendado)
 
 ```bash
+./start.sh
+```
+
+O script sobe o MariaDB em segundo plano, executa o `ddl.sql` e o `dml.sql`, espera o cliente responder e abre **`http://localhost:8080`** no navegador (`xdg-open` no Linux, `open` no macOS). O **phpMyAdmin** abre já autenticado, com o banco `MadeiraVerde` disponível para navegar pelas tabelas e rodar consultas na aba **SQL**.
+
+Sem o script, por exemplo no Windows, o mesmo ambiente sobe com:
+
+```bash
 docker compose up
 ```
 
-O Compose sobe o MariaDB, executa o `ddl.sql` e o `dml.sql` e, quando o banco está pronto, mostra no log:
+Nesse caso, o log mostra o endereço quando o banco está pronto:
 
 ```text
 url-1  | Banco MadeiraVerde pronto. Cliente MariaDB em http://localhost:8080
 ```
 
-Acesse **`http://localhost:8080`**: o **phpMyAdmin** abre já autenticado, com o banco `MadeiraVerde` disponível para navegar pelas tabelas e rodar consultas na aba **SQL**.
-
-Para encerrar, use `Ctrl+C`. Os scripts só rodam na criação do banco; para recriá-lo do zero após alterar algum deles:
+Os scripts SQL só rodam na criação do banco. Para encerrar o ambiente, ou para recriá-lo do zero após alterar algum deles:
 
 ```bash
 docker compose down
-docker compose up
+./start.sh
 ```
 
 Também é possível usar o cliente de linha de comando do container:

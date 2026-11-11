@@ -130,11 +130,10 @@ Nesse caso, o log mostra o endereço quando o banco está pronto:
 url-1  | Banco MadeiraVerde pronto. Cliente MariaDB em http://localhost:8080
 ```
 
-Os scripts SQL só rodam na criação do banco. Para encerrar o ambiente, ou para recriá-lo do zero após alterar algum deles:
+Os scripts SQL só rodam na criação do banco. Se o ambiente já estiver rodando, o `start.sh` o derruba antes de subir, então basta rodá-lo de novo para recriar o banco depois de alterar algum script. Para só encerrar:
 
 ```bash
 docker compose down
-./start.sh
 ```
 
 Também é possível usar o cliente de linha de comando do container:

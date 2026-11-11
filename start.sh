@@ -1,5 +1,5 @@
 #!/bin/sh
-# Sobe o MariaDB com o ddl.sql e o dml.sql e abre o phpMyAdmin no navegador.
+# Sobe o MariaDB com o ddl.sql e o dml.sql e abre o DbGate no navegador.
 set -e
 cd "$(dirname "$0")"
 

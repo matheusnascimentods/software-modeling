@@ -46,7 +46,7 @@ A Madeira Verde não mantém estoque de produtos prontos: cada encomenda dispara
 | **Modelagem** | DBDesigner (DER e MER) |
 | **Banco de dados** | MariaDB (compatível com MySQL) |
 | **Scripts** | SQL — DDL e DML |
-| **Ambiente** | Docker Compose com MariaDB 11 e phpMyAdmin 5 |
+| **Ambiente** | Docker Compose com MariaDB 11 e DbGate |
 | **Documentação** | Markdown com diagramas Mermaid |
 
 ---
@@ -100,8 +100,8 @@ software-modeling/
 ├── report.md   # Relatório: convenção de nomes e decisões de modelagem
 ├── ddl.sql     # Criação do banco MadeiraVerde e das 18 tabelas
 ├── dml.sql     # Dados de exemplo para todas as tabelas
-├── docker-compose.yml  # MariaDB com os scripts + phpMyAdmin em localhost:8080
-├── start.sh            # Sobe o ambiente e abre o phpMyAdmin no navegador
+├── docker-compose.yml  # MariaDB com os scripts + DbGate em localhost:8080
+├── start.sh            # Sobe o ambiente e abre o DbGate no navegador
 ├── LICENSE
 └── README.md
 ```
@@ -116,7 +116,7 @@ software-modeling/
 ./start.sh
 ```
 
-O script sobe o MariaDB em segundo plano, executa o `ddl.sql` e o `dml.sql`, espera o cliente responder e abre **`http://localhost:8080`** no navegador (`xdg-open` no Linux, `open` no macOS). O **phpMyAdmin** abre já autenticado, com o banco `MadeiraVerde` disponível para navegar pelas tabelas e rodar consultas na aba **SQL**.
+O script sobe o MariaDB em segundo plano, executa o `ddl.sql` e o `dml.sql`, espera o cliente responder e abre **`http://localhost:8080`** no navegador (`xdg-open` no Linux, `open` no macOS). O **[DbGate](https://dbgate.org/)** abre com a conexão **MadeiraVerde** já configurada, sem login: dá para navegar e editar os dados das tabelas, rodar consultas no editor SQL e gerar o diagrama ER do banco.
 
 Sem o script, por exemplo no Windows, o mesmo ambiente sobe com:
 
@@ -168,7 +168,7 @@ O `ddl.sql` cria o banco `MadeiraVerde`; para rodá-lo de novo, remova o banco a
 ## 📌 Escopo & Limitações
 
 - **Somente o banco de dados**: não há aplicação; o repositório contém o modelo, os scripts e o ambiente Docker para executá-los.
-- **Credenciais locais**: `root`/`root` e o phpMyAdmin com login automático servem apenas para uso local.
+- **Credenciais locais**: `root`/`root` e o DbGate sem login servem apenas para uso local.
 - **Diagramas originais fora do repositório**: o DER e o MER foram feitos no DBDesigner; aqui o modelo é representado pelo diagrama Mermaid e pelos scripts.
 - **Dados fictícios**: o `dml.sql` usa dados inventados, com nomes de personalidades, apenas para exemplo.
 - **Requisitos parciais**: alguns pontos do edital, como as horas de mão de obra por produto e vários telefones por empresa, não foram modelados; a lista completa está no [relatório](report.md#diferenças-em-relação-ao-edital).
